@@ -1,0 +1,29 @@
+//Дана строка. Проверьте, что эта строка состоит только из четных цифр.
+/**
+ * isEvenDigitsOnly проверяет, состоит ли строка только из четных чисел
+ * @param {string} - принимает на ввод строку
+ * @returns {boolean} - вовзвращает false, если строка содержит знаки, кроме чисел, или нечетные числа
+ * 					  - возвращает true, если строка содержит только четные числа
+*/
+function isEvenDigitsOnly (str) {
+if (str.length === 0) {
+	return false
+}
+let flag = -1
+
+for (let i = 0; i < str.length; i++) {
+	let num = str[i]
+
+	if (num < '0' || num > '9' || num % 2 !== 0) {
+		return false
+	} 
+}
+
+return true
+
+}
+
+console.log(isEvenDigitsOnly('468'))
+console.log(isEvenDigitsOnly('4687'))
+console.log(isEvenDigitsOnly('124 45'))
+console.log(isEvenDigitsOnly('123kkk56'))
