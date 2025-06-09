@@ -1,0 +1,89 @@
+// Дана строка в формате: 'kebab-case'. Преобразуйте ее в формат: 'snake_case'
+/**
+ * Функция change изменяет формат слова со kebab-case на snace_case
+ * @param {string} str - принимаемое значение в формате kebab-case
+ * @returns {string} - возвращает значение в формате snace_case
+*/
+let str = 'cat-black'
+
+function change (str) {
+    if (str.includes('-')) {
+        newStr = str.replace('-', '_')
+    }
+    return newStr
+}
+
+console.log(change(str))
+
+// Дана строка в формате: 'snake_case'. Преобразуйте ее в формат: 'camelCase'
+
+let str = 'cat_black'
+
+/**
+ * Функция change изменяет формат слова со snace_case на camelCase
+ * @param {string} str - принимаемое значение в формате snace_case
+ * @returns {string|false} Возвращает строку в формате camelCase (например, 'catBlack'),
+ *                         или исходную строку, если символ подчеркивания '_' находится в конце (например, 'last_'),
+ *                         или `false`, если строка не содержит символ подчеркивания.
+*/
+
+function change (str) {
+    if (str.includes('_')) {
+        const index = str.indexOf('_')
+        let beforeIndex = str.slice(0, index)
+        let afterIndex = str.slice(index + 1)
+        
+        if (afterIndex.length === 0) { 
+        return str; 
+        }
+
+        let upperLetter = afterIndex[0].toUpperCase()
+        afterIndex = afterIndex.slice(1)
+        return beforeIndex + upperLetter + afterIndex
+    } else {
+        return false
+    }
+
+}
+
+console.log(change(str))
+
+// Дана строка в формате: 'camelCase'. Преобразуйте ее в формат: 'snake_case'
+let str = 'catBlack'
+
+/**
+ * Функция change изменяет первое вхождение с camelCase на snace_case
+ * @param {string} str - принимаемое значение в формате camelCase
+ * @returns {string|boolean} - возвращает слово в формате snace_case
+ *                           - либо вовзвращает false , если входная строка 
+ *                             не является валидным camelCase (т.е. не содержит заглавных букв после первой, или начинается с заглавной буквы). 
+*/
+
+function change (str) {
+     if (str.length === 0) {
+        return false;
+    } // проверка на пустую строку
+      if (str[0] === str[0].toUpperCase() && str[0] !== str[0].toLowerCase()) {
+        return false; // Возвращаем false, если это PascalCase.
+    }
+
+  let indexUpperLetter = -1;
+
+for (let i = 1; i < str.length; i++) {
+    if (str[i] === str[i].toUpperCase() && str[i] !== str[i].toLowerCase()) {
+        indexUpperLetter = i
+        break
+    } 
+}
+  if (indexUpperLetter === -1) {
+    return false;
+  }
+    let beforIndex = str.slice(0, indexUpperLetter)
+    let afterIndex = str.slice(indexUpperLetter)
+    let lowerLetter = afterIndex[0].toLowerCase()
+    afterIndex = afterIndex.slice(1)
+    return beforIndex + '_' + lowerLetter + afterIndex
+
+}
+
+console.log(change(str))
