@@ -1,0 +1,103 @@
+//создайте список, который будет автоматически заполняться пунктами с текстом элементов массива. Модифицируйте задачу, добавьте возможность редактирования, дополнения списка, ссылку на удаление и зачеркивание текста
+let arr = ['!', '!!', '!!!']
+
+let body = document.querySelector('body')
+let ul = document.createElement('ul')
+body.appendChild(ul)
+
+// Вспомогательная функция для добавления слушателя 'click' к span
+// Мы вынесли это в отдельную функцию, чтобы получить ОДНУ ссылку на функцию,
+// которую можно будет потом корректно удалить и добавить.
+function addSpanClickListener(li, span) {
+    // Возвращаем функцию-обработчик. Теперь это одна и та же функция каждый раз.
+    return function() {
+        changeLi(li, span);
+    };
+}
+
+function createLi () {
+    for (let i = 0; i < arr.length; i++) {
+        let li = document.createElement('li')
+        ul.appendChild(li)
+
+        let span = document.createElement('span')
+        span.textContent = arr[i]
+        li.appendChild(span)
+
+    // Сохраняем ссылку на обработчик в свойстве элемента span
+    // Это позволяет нам удалить именно этот слушатель позже
+    span.spanClickListener = addSpanClickListener(li, span);
+    span.addEventListener('click', span.spanClickListener);
+        remove(li) 
+        cross(li, span)
+    }
+}
+
+function remove(liToRemove) {
+    let removeButton = document.createElement('a')
+    removeButton.href = '#'
+    removeButton.textContent = ' ' + 'удалить'
+    liToRemove.appendChild(removeButton)
+    removeButton.addEventListener('click', function (event) {
+        liToRemove.remove()
+        event.preventDefault()
+    })
+}
+
+function cross (liToCross, span) {
+    let crossButton = document.createElement('a')
+    crossButton.href = '#'
+    crossButton.textContent = ' ' + 'зачеркнуть'
+    liToCross.appendChild(crossButton)
+    crossButton.addEventListener('click', function (event) {
+        span.style.textDecoration = 'line-through'
+        event.preventDefault ()
+
+    })
+}
+
+function changeLi (li, span) {
+    let input = document.createElement('input')
+    input.value = span.textContent
+    span.textContent = ''
+    li.appendChild(input)
+
+      // Удаляем старый слушатель, используя сохраненную ссылку на функцию
+  if (span.spanClickListener) { // Проверяем, существует ли он
+      span.removeEventListener('click', span.spanClickListener);
+  }
+    input.addEventListener('blur', function clickInput () {
+        span.textContent = input.value
+        input.remove() //оптимизация
+
+    // Добавляем слушатель обратно, используя ту же сохраненную ссылку на функцию
+    // Важно: если элемент был удален (например, через кнопку "удалить"), этот слушатель не будет работать.
+    // Но это уже другая логика, которая здесь не обрабатывается.
+    span.addEventListener('click', span.spanClickListener);
+    })
+    input.focus()
+}
+
+createLi()
+
+let newInput = document.createElement('input')
+newInput.placeholder = 'Добавить новый элемент'
+ul.appendChild(newInput)
+newInput.addEventListener('blur', function createNewLi (){
+    if (this.value.trim() !== ''){
+        let newLi = document.createElement('li')
+        ul.insertBefore(newLi, newInput)
+            
+        let newSpan = document.createElement('span')
+        newSpan.textContent = newInput.value
+        newLi.appendChild(newSpan)  
+
+        newSpan.spanClickListener = addSpanClickListener(newLi, newSpan);
+        newSpan.addEventListener('click', newSpan.spanClickListener); 
+        remove(newLi);
+        cross(newLi, newSpan);
+
+        this.value = '';
+
+    }
+})
