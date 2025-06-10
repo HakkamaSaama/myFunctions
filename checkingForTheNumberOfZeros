@@ -1,0 +1,33 @@
+//Дан массив со числами. Удалите из него числа, имеющие два и более нуля.
+/**
+ * checkingForTheNumberOfZeros проверяет, состоит ли массив из чисел, в которых не более двух нулей
+ * @param {array} - принимает на ввод массив
+ * @returns {array} newArr - вовзвращает newArr, в котором будут только числа, в которых не более двух нулей
+*/
+function checkingForTheNumberOfZeros (arr) {
+let newArr = []
+for (let elem of arr) {
+	let flag = 0
+	let str = String(elem)
+	let isValidNumberString = true; 
+	for (let i = 0; i < str.length; i++) {
+		if (str[i] < '0' || str[i] > '9') {
+		isValidNumberString = false;
+		}
+
+		if (str[i] === '0') {
+			flag++
+		}
+	}
+
+	if (isValidNumberString && flag <= 2) {
+		newArr.push(elem)
+	}
+}
+	return newArr
+}
+console.log(checkingForTheNumberOfZeros([123, 1002, 123000, 400002]))
+console.log(checkingForTheNumberOfZeros([1, 3, 4, 1000]))
+console.log(checkingForTheNumberOfZeros([1, 3, 'tre', 220]))
+console.log(checkingForTheNumberOfZeros([1, 34, , 456]))
+
