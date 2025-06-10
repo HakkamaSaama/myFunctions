@@ -1,0 +1,21 @@
+// Найдите все числа от 1 до 1000, сумма цифр которых равна 13.
+/**
+ * getNumbersWhoseDigitsSumTo13 перебирает все числа от 1 до 1000 и сохраняет в массив числа, цифры сумма которых равна 13
+ * @returns {Array} arr - массив с числами, сумма цифр которых равна 13
+*/
+function getNumbersWhoseDigitsSumTo13 () {
+	let arr = []
+for (let i = 1; i <= 1000; i++) {
+	let str = String(i) 
+	let sum = 0
+	for (let j = 0; j < str.length; j++) {
+		sum += Number(str[j])
+	}
+	if (sum === 13) {
+		arr.push(i)
+	}
+}
+return arr
+}
+
+console.log(getNumbersWhoseDigitsSumTo13())
