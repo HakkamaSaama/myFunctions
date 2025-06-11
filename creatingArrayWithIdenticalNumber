@@ -1,0 +1,40 @@
+// Дано число. Получите массив позицией всех цифр 3 в этом числе, за исключением первой и последней.
+/**
+ * creatingArrayWithIdenticalNumber поиск общих цифр у двух чисел
+ * @param {number} num1 - первое число для сравнения
+ * @param {number} num2 - второе число для сравнения
+ * @returns {Array|String} res -массив, содержащий одинаковые цифры двух чисел
+ *						   вовзвращает строку, если у чисел не было одинаковых цифр
+ *						   вовзвращает строку, если введено пустое значение
+ *  					   вовзвращает строку, если введено нечисловое значение
+*/
+function creatingArrayWithIdenticalNumber (num1, num2) {
+if (String(num1).length === 0 || String(num2).length === 0 ) {
+	return 'введено пустое значение'
+}
+if (num1 !== Number(num1) || num2 !== Number(num2)) {
+	return 'введено нечисловое значение'
+}
+let str1 = String(num1)
+let str2 = String(num2)
+
+let identicalNumber = []
+for (let i = 0; i < str1.length; i++) {
+	if (str2.includes(str1[i])) {
+		identicalNumber.push(Number(str1[i]))
+	}
+}
+
+const res = [...new Set(identicalNumber)];
+
+if (res.length === 0) {
+  return 'у чисел не было одинаковых цифр';
+}
+	return res
+}
+
+console.log(creatingArrayWithIdenticalNumber(123, 432))
+console.log(creatingArrayWithIdenticalNumber(123444, 432))
+console.log(creatingArrayWithIdenticalNumber('', 432))
+console.log(creatingArrayWithIdenticalNumber('g', 432))
+console.log(creatingArrayWithIdenticalNumber(123, 567))
