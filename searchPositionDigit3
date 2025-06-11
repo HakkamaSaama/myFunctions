@@ -1,0 +1,42 @@
+/**
+ * searchPositionDigit3 поиск позиций всех цифр 3 в числе, за исключением первого и последнего вхождения
+ * @param {number} num -  число, по которому будет осуществляться поиск
+ * @returns {Array|String} res -массив, содержащий позиции всех цифр 3 в числе, за исключением первого и последнего вхождения
+ *						   вовзвращает строку, если у числа не было цифры 3
+ *						   вовзвращает строку, если введено пустое значение
+ *  					   вовзвращает строку, если введено нечисловое значение
+*/
+function searchPositionDigit3 (num) {
+if (typeof num !== 'number' || isNaN(num)) {
+	return 'введено нечисловое значение'
+}
+
+if (num === null || num === undefined) {
+	return  'введено пустое значение'
+}
+
+let str = String(num)
+let position = []
+const digitToFind = '3'
+const firstIndex = str.indexOf(digitToFind)
+const lastIndex = str.lastIndexOf(digitToFind)
+
+for (let i = 0; i < str.length; i++) {
+	let elem = Number(str[i])
+	if (str[i] === digitToFind) {	
+	if (i !== firstIndex && i !== lastIndex) {
+		position.push(i);
+	}
+	}
+}
+
+if (position.length === 0) {
+	return 'число не содержит цифру 3'
+} else {
+	return position
+}
+}
+console.log(searchPositionDigit3(2378943212346738))
+console.log(searchPositionDigit3())
+console.log(searchPositionDigit3(678596))
+console.log(searchPositionDigit3('dvvgds'))
