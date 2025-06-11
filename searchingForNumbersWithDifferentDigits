@@ -1,0 +1,43 @@
+//Дан массив со числами. Оставьте в нем числа, состоящие из разных цифр, а остальные удалите.
+/**
+ * searchingForNumbersWithDifferentDigits поиск чисел, состоящих из разных цифр
+ * @param {Array} arr -  массив, по которому будет осуществляться поиск
+ * @returns {Array|String} res -массив, содержащий числа с разными цифрами
+ *						   вовзвращает строку, если передан пустой массив
+ *						   вовзвращает строку, если передан массив с нечисловыми значениями
+ *  					   вовзвращает строку, если в массиве не было чисел с разными цифрами
+*/
+function searchingForNumbersWithDifferentDigits (arr) {
+	if (arr.length === 0) {
+	return  'введено пустое значение'
+	}
+	let res = []
+	for (let num of arr) {
+		if (typeof num !== 'number' || isNaN(num)) {
+		return 'введено нечисловое значение'
+		}
+
+		let str = String(num)
+		let flag = 0
+		for (let i = 0; i < str.length; i++) {
+			if (str.indexOf(str[i]) !== str.lastIndexOf(str[i])) {
+				flag++
+				break
+			}
+		}
+
+		if (flag === 0) {
+			res.push(num)
+		}
+	}
+
+	if (res.length === 0) {
+		return ' в массиве не было чисел с разными цифрами'
+		} else {
+		return res
+	}
+}
+
+console.log(searchingForNumbersWithDifferentDigits([234, 223, 4332, 567]))
+console.log(searchingForNumbersWithDifferentDigits([]))
+console.log(searchingForNumbersWithDifferentDigits(['fd', 234, 442]))
