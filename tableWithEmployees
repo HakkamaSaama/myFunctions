@@ -1,0 +1,157 @@
+/*
+ * createNewEmployee создает новую строку в таблице для добавления данных нового сотрудника.
+ * Строка содержит три поля ввода и кнопку "create row".  
+ * При нажатии кнопки, если поля заполнены корректно (первое поле не пустое, второе и третье содержат числа),
+ * создается новая строка в таблице с данными из полей ввода, и поля очищаются.
+ *
+ * @param {HTMLTableElement} table - Таблица, в которую добавляется новая строка.
+ */
+
+let employees = [
+	{name: 'employee1', age: 30, salary: 400},
+	{name: 'employee2', age: 31, salary: 500},
+	{name: 'employee3', age: 32, salary: 600},
+];
+
+function addSpanClickListener(cell, span) {
+    // Возвращаем функцию-обработчик. Теперь это одна и та же функция каждый раз.
+    return function() {
+        editCells(cell, span)
+    }
+}
+
+function styleCells (cell) {
+	cell.style.border = '1px solid black'
+    cell.style.padding = '8px'
+    cell.style.textAlign = 'center'
+}
+
+function tableWithEmployees (employees) {
+	let body = document.querySelector('body')
+	let table = document.createElement('table')
+	table.style.borderCollapse = 'collapse'
+	body.appendChild(table)
+
+	if (employees.length > 0) {
+		let headerRow = document.createElement('tr')
+		let keys = Object.keys(employees[0])
+
+		for (let key of keys) {
+			let headerCell = document.createElement('th')
+			headerCell.textContent = key
+			styleCells (headerCell)
+			headerRow.appendChild(headerCell)
+		}
+		table.appendChild(headerRow)
+	} else {
+		alert('Нет данных для отображения.')
+    	return; 
+	}
+
+	for (let employee of employees) {
+		let row = document.createElement('tr')
+		let values = Object.values(employee)
+
+			for(let value of values) {
+				let cell = document.createElement('td')
+				let span = document.createElement('span')
+				span.textContent = value
+				styleCells (cell)
+				cell.appendChild(span)
+				row.appendChild(cell)
+
+     		let spanClickListener = addSpanClickListener(cell, span)
+     		span.addEventListener('click', spanClickListener)
+			}
+		removeRow(row)
+		table.appendChild(row)
+	}
+
+	createNewEmployee (table)
+}
+
+tableWithEmployees (employees)
+
+function editCells (cell, span) {
+	let input = document.createElement('input')
+	input.value = span.textContent
+	span.textContent = ''
+	cell.appendChild(input)
+	if (span.spanClickListener) { 
+		span.removeEventListener('click', span.spanClickListener)
+	}
+	input.addEventListener('blur', function editCells () {
+		span.textContent = input.value
+		input.remove();
+		span.addEventListener('click', span.spanClickListener)
+	})
+	
+	input.focus();
+}
+
+function removeRow (row) {
+	let remove = document.createElement('a')
+	remove.href = '#'
+	remove.textContent = 'remove'
+	remove.style.marginLeft = '8px'
+		remove.addEventListener('click', function (event) {
+			row.remove()
+			event.preventDefault()
+		})
+	row.appendChild(remove)
+}
+
+function createNewEmployee (table) {
+	const createRow = document.createElement('tr')
+	for(let i = 0; i < 3; i++) {
+		let createCell = document.createElement('td')
+		let newInput = document.createElement('input')
+		newInput.id = 'input' + (i + 1)
+      		createCell.style.padding = '8px'
+     		createCell.style.textAlign = 'center'
+		createCell.appendChild(newInput)
+		createRow.appendChild(createCell)
+	}
+	let buttonCreate = document.createElement('button')
+	buttonCreate.textContent = 'create row'
+	    buttonCreate.style.padding = '8px'
+     	buttonCreate.style.textAlign = 'center'
+		buttonCreate.style.marginLeft = '8px'
+	createRow.appendChild(buttonCreate)
+		buttonCreate.addEventListener('click', function (){
+			let input1 = document.getElementById('input1')
+			let input2 = document.getElementById('input2')
+			let input3 = document.getElementById('input3')
+    		if (input1.value.trim() === '') {
+      		alert('Первое поле не может быть пустым!');
+      		return;
+    		}
+
+    		if (isNaN(parseFloat(input2.value.trim())) || isNaN(parseFloat(input3.value.trim()))) {
+        	alert('Во втором и третьем полях должны быть числа!');
+        	return;
+    		}
+
+			let inputs = [input1, input2, input3]
+
+			let newRow = document.createElement('tr')
+			table.insertBefore(newRow, createRow)
+
+			for (let input of inputs) {
+				let newCell = document.createElement('td')
+				styleCells (newCell)
+				let newSpan = document.createElement('span')
+				newSpan.textContent = input.value
+				newCell.appendChild(newSpan)
+				newRow.appendChild(newCell)
+
+				newSpan.spanClickListener = addSpanClickListener(newCell, newSpan)
+     			newSpan.addEventListener('click', newSpan.spanClickListener)
+
+				input.value = ''
+			}
+
+			removeRow (newRow)
+		})
+	table.appendChild(createRow)
+}
