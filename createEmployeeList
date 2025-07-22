@@ -1,0 +1,131 @@
+/*
+ * createEmployeeList - создает список из emloyees, каждым пунктом которого является работник 
+ * при нажатии на имя, возраст или зарплату открывается окно для редактирования значения
+ * строка содержит ссылку на удаление пункта списка
+ * последняя строка содержит три поля ввода и кнопку для добавления нового сотрудника, она сработает, 
+ * если все три поля не пустые, а второе и третье содержат только числовые значения 
+*/
+
+let employees = [
+	{name: 'employee1', age: 30, salary: 400},
+	{name: 'employee2', age: 31, salary: 500},
+	{name: 'employee3', age: 32, salary: 600},
+];
+
+function addSpanClickListener (span) {
+	return function () {
+		editEmployee(span)
+	}
+} 
+
+function createEmployeeList (employees) {
+	let body = document.querySelector('body')
+	let ul = document.createElement('ul')
+
+	if (employees.length > 0) {
+	for (let employee of employees) {
+		let values = Object.values(employee)
+
+		let li = document.createElement('li')
+	
+		for (let i = 0; i < values.length; i++) {
+			let span = document.createElement('span')
+			span.style.paddingRight= '10px'
+			span.textContent = values[i]
+			li.appendChild(span)
+
+			let spanClickListener = addSpanClickListener(span)
+    		span.realClickListener = spanClickListener; // Добавляем свойство для хранения ссылки
+			span.addEventListener('click', span.realClickListener)  	
+		}
+		deleteEmployee(li)
+		ul.appendChild(li)
+	} 
+	} else {
+        alert('Нет данных для отображения.')
+        return; 
+    }
+
+	body.appendChild(ul)
+	addNewEmployee(ul)
+}
+
+console.log(createEmployeeList(employees))
+
+function editEmployee(span) {
+ let input = document.createElement('input')
+ input.value = span.textContent
+ span.textContent = ''
+ span.appendChild(input)
+
+ if (span.realClickListener) { 
+        span.removeEventListener('click', span.realClickListener)
+    }
+
+ input.addEventListener('blur', function () {
+	span.textContent = input.value
+	input.remove()
+	span.addEventListener('click', span.realClickListener)
+ })
+}
+
+function deleteEmployee(li) {
+	let link = document.createElement('a')
+	link.href = '#'
+	link.textContent = 'delete'
+	link.addEventListener('click', function (event) {
+		li.remove()
+		event.preventDefault()
+	})
+	li.appendChild(link)
+}
+
+function addNewEmployee(ul) { 
+	let createLi = document.createElement('li')
+	let inputName = document.createElement('input')
+	let inputAge = document.createElement('input')
+	let inputSalary = document.createElement('input')
+	let buttonCreate = document.createElement('button')
+
+	ul.appendChild(createLi)
+
+	let inputs = [inputName, inputAge, inputSalary]
+		for (let input of inputs) {
+			input.style.marginRight = '10px'
+		}
+
+	buttonCreate.textContent ='add new employee'
+	buttonCreate.addEventListener('click', function () {
+		if (inputName.value.trim() === '') {
+			alert('Первое поле не может быть пустым!');
+			return;
+		}
+
+		if (isNaN(parseFloat(inputAge.value.trim())) || isNaN(parseFloat(inputSalary.value.trim()))) {
+			alert('Во втором и третьем полях должны быть числа!');
+			return;
+		}
+		
+		let newLi = document.createElement('li')
+
+		for (let input of inputs) {
+			let newSpan = document.createElement('span')
+			newSpan.textContent = input.value
+			input.value = ''
+			newSpan.style.marginRight = '10px'
+			newLi.appendChild(newSpan)
+
+			let newSpanClickListener = addSpanClickListener(newSpan)
+			newSpan.realClickListener = newSpanClickListener; // Добавляем свойство для хранения ссылки
+			newSpan.addEventListener('click', newSpan.realClickListener) 
+		}
+		
+		deleteEmployee(newLi)
+		ul.insertBefore(newLi, createLi)
+	})
+
+	createLi.appendChild(inputName)
+	createLi.appendChild(inputAge)
+	createLi.appendChild(inputSalary)
+	createLi.appendChild(buttonCreate)
+}
