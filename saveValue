@@ -1,0 +1,23 @@
+//Дан инпут. По потери фокуса в этом инпуте сохраните его значение в локальное хранилище. При следующем заходе пользователя на страницу установите в инпуте сохраненный ранее текст.
+function saveValue () {
+    const input = document.querySelector('input')
+    if (!input) {
+        console.error("Элемент не найден на странице.")
+        return
+    }
+
+    const valueFromLocalStorage = localStorage.getItem('enteredValue')
+
+    if (valueFromLocalStorage !== null) { // Проверяем, что значение существует
+        input.value = valueFromLocalStorage
+        console.log(`Загружено значение "${valueFromLocalStorage}" из localStorage.`)
+    }
+
+    input.addEventListener('blur', function (){
+    let enteredValue = this.value
+    localStorage.setItem('enteredValue', enteredValue)
+    console.log('значение сохранено')
+    })
+}
+
+saveValue() 
