@@ -1,0 +1,53 @@
+// По заходу пользователя на сайт спросите у него дату рождения. При следующем заходе пользователя на сайт, если у него в этот день будет День Рождения - поздравьте его с этим праздником.
+function determiningTheBirthday() {
+    let body = document.querySelector('body')
+    let input = document.createElement('input')
+    input.type = 'date'
+    input.placeholder = 'Введите дату рождения (ГГГГ-ММ-ДД)';
+    body.appendChild(input)
+    let birtDay = localStorage.getItem('birtDay')
+    let dateBDay
+    
+    function checkBirthday() {
+        if (birtDay) {
+            const today = new Date()
+            const formatDateNow = addZero(today.getMonth() + 1) + '-' + addZero(today.getDate())
+            if (formatDateNow === birtDay) {
+                console.log('С Днем Рождения!')
+            }
+        }
+    }
+
+    input.addEventListener('change', function () {
+        let enteringValue = this.value
+        if (enteringValue) {
+            let enteringDate = new Date(enteringValue)
+                if (isNaN(enteringDate.getTime())) {
+                    console.error("Некорректный формат даты.")
+                    this.value = ''
+                    localStorage.removeItem('birtDay')
+                    birtDay = null
+                } else {
+                let monthBDay = enteringDate.getMonth() + 1
+                let dayBDay = enteringDate.getDate()
+                dateBDay = addZero(monthBDay) + '-' + addZero(dayBDay)
+                localStorage.setItem('birtDay', dateBDay)
+                birtDay = dateBDay
+                console.log(`Дата рождения сохранена: ${birtDay}`)
+                checkBirthday();
+                }
+        }
+    })
+    checkBirthday();
+}
+
+function addZero(num) {
+    if (num >= 0 && num <= 9) {
+        return '0' + num;
+    } else {
+        return num;
+    }
+}
+
+determiningTheBirthday() 
+ 
